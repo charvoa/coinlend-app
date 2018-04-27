@@ -10,7 +10,7 @@ import HomeScreen from './HomeScreen';
 
 const RootTab = TabNavigator(
   {
-    Home: {
+    Today: {
       screen: HomeScreen,
     },
     Loans: {
@@ -27,7 +27,7 @@ const RootTab = TabNavigator(
     },
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Today',
     navigationOptions: {
       headerStyle: {
         backgroundColor: '#f4511e',
@@ -43,29 +43,21 @@ const RootTab = TabNavigator(
       tabBarIcon: ({ focused, tintColor }) => {
         const { routeName } = navigation.state;
         let iconName;
-        if (routeName === 'Home') {
+        if (routeName === 'Today') {
           iconName = `ios-information-circle${focused ? '' : '-outline'}`;
         } else if (routeName === 'Settings') {
           iconName = `ios-options${focused ? '' : '-outline'}`;
         }
-
-        // You can return any component that you like here! We usually use an
-        // icon component from react-native-vector-icons
+        
         return <Ionicons name={iconName} size={25} color={tintColor} />;
       },
     }),
-    tabBarOptions: {
-      activeTintColor: 'blue',
-      inactiveTintColor: 'green',
-      style: {
-          backgroundColor: 'red',
-      },
-    },
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
     animationEnabled: false,
     swipeEnabled: false,
   }
+
 );
 
 module.exports = RootTab;
