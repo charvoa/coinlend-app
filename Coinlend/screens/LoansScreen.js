@@ -52,7 +52,7 @@ class LoansListItem extends React.PureComponent {
     _renderSeparator = () => {
       return (
         <View
-          style={{ height: 1, width: '86%', backgroundColor: 'black', marginLeft: '14%' }}
+          style={{ height: 1, width: '100%', backgroundColor: '#171F27'}}
         />
       );
     }
@@ -103,6 +103,7 @@ class LoansListItem extends React.PureComponent {
       return (
         <List containerStyle={{ borderBottomWidth: 0, borderTopWidth: 0}} >
           <SectionList
+            style={{backgroundColor: '#27292A'}}
             sections={[
               { title: 'Bitfinex', data: this.state.data },
               { title: 'Poloniex', data: this.state.data },

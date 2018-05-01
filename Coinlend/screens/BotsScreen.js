@@ -3,6 +3,7 @@ import { Switch, FlatList, Dimensions, StyleSheet} from 'react-native';
 import { List, ListItem, Button } from 'react-native-elements';
 import { View, TextInput, Text } from 'react-native-ui-lib';
 import { FormLabel, FormInput } from 'react-native-elements'
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 class BotListItem extends React.PureComponent {
 
@@ -116,6 +117,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: 'column',
     alignSelf: 'flex-start',
+		marginTop: getStatusBarHeight()
   },
   item: {
     flex: 1,

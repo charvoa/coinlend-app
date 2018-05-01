@@ -91,6 +91,7 @@ class HomeFlatList extends React.Component {
 		return (
 			<List containerStyle={{ borderBottomWidth: 0, borderTopWidth: 0}} >
 				<FlatList
+					style={{backgroundColor: '#171F27'}}
 					data={this.state.data}
 					keyExtractor={this._keyExtractor}
 					renderItem={this._renderItem}

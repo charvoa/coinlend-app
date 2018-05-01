@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Image, View, Text, SectionList } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
+import { Col, Row, Grid } from 'react-native-easy-grid';
 
 class InterestsListItem extends React.PureComponent {
 
@@ -40,20 +41,38 @@ class InterestsListItem extends React.PureComponent {
     }
   }
 
-  class InterestsFlatList extends React.Component {
-
-    _keyExtractor = (item, index) => item.id;
-
-    _renderSeparator = () => {
+  class InterestsHeaderItem extends React.Component {
+    render() {
       return (
-        <View
-          style={{ height: 1, width: '86%', backgroundColor: 'black', marginLeft: '14%' }}
-        />
-      );
-    }
-
-    _renderHeader = () => {
-      return (
+        <View backgroundColor='#151F29'>
+        <Grid style={{height: 214}}>
+          <Row style={{flex:1, flexDirection:'column'}} alignItems='center' justifyContent='center'>
+            <Text style={{fontSize: 40, color:'#A1C363'}}>
+              $597,803.62
+            </Text>
+            <Text style={{fontSize: 10, color: 'white'}}>
+              Total lending balance
+            </Text>
+          </Row>
+          <Row>
+            <Col alignItems='center' justifyContent='center'>
+              <Text style={{fontSize: 25, color:'#A1C363'}}>
+                $2,583.98
+              </Text>
+              <Text style={{fontSize: 10, color: 'white'}}>
+                Total Interest (30d)
+              </Text>
+            </Col>
+            <Col alignItems='center' justifyContent='center'>
+              <Text style={{fontSize: 25, color:'#A1C363'}}>
+                $8,904.44
+              </Text>
+              <Text style={{fontSize: 10, color: 'white'}}>
+                Expected Interest (next 30d)
+              </Text>
+            </Col>
+          </Row>
+        </Grid>
         <View
           style={{flex: 1,
             height: 40,
@@ -77,7 +96,25 @@ class InterestsListItem extends React.PureComponent {
               </Text>
             </View>
           </View>
+        </View>
       );
+    }
+  }
+
+  class InterestsFlatList extends React.Component {
+
+    _keyExtractor = (item, index) => item.id;
+
+    _renderSeparator = () => {
+      return (
+        <View
+          style={{ height: 1, width: '86%', backgroundColor: 'black', marginLeft: '14%' }}
+        />
+      );
+    }
+
+    _renderHeader = () => {
+      return (<InterestsHeaderItem />);
     }
 
     _renderItem = ({ item }) => (
@@ -87,7 +124,7 @@ class InterestsListItem extends React.PureComponent {
     _renderSectionHeader = ({ section }) => {
       return (
         <View backgroundColor='#27292A' flex alignItems='center' justifyContent='center' height={40}>
-          <Text alignSelf='center'style={{fontWeight: "700", fontSize:20, color:'white'}}>{section.title}</Text>
+          <Text alignSelf='center'style={{fontSize:20, color:'white'}}>{section.title}</Text>
         </View>
       );
     }
@@ -125,6 +162,7 @@ class InterestsListItem extends React.PureComponent {
       return (
         <List containerStyle={{ borderBottomWidth: 0, borderTopWidth: 0}} >
           <SectionList
+            style={{backgroundColor: '#171F27'}}
             sections={[
               { title: 'Bitfinex', data: this.state.data },
               { title: 'Poloniex', data: this.state.data },
