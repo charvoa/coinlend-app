@@ -1,24 +1,29 @@
 import React from 'react';
-import { Button, View, Text, Switch, TextInput, FlatList, Dimensions, StyleSheet} from 'react-native';
-import { List, ListItem } from 'react-native-elements';
+import { Switch, FlatList, Dimensions, StyleSheet} from 'react-native';
+import { List, ListItem, Button } from 'react-native-elements';
+import { View, TextInput, Text } from 'react-native-ui-lib';
+import { FormLabel, FormInput } from 'react-native-elements'
 
 class BotListItem extends React.PureComponent {
 
 	render() {
 		return (
-			<View style={styles.item}>
+			<View backgroundColor='#1C2A37' style={styles.item}>
           <View style={{height: 80, backgroundColor: '#4F9DED', justifyContent: 'center', alignItems: 'center'}} >
             <Text style={{color: 'white'}}>{this.props.item.mainTitle}</Text>
             <Text style={{color: 'white'}}>{this.props.item.subtitle}</Text>
 
           </View>
-          <View style={{backgroundColor: '#1C2A37', flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <TextInput placeholder={this.props.item.fields[0]} placeholderTextColor='white' spellCheck={false}>
-            </TextInput>
-            <TextInput style={{marginTop: 10}} placeholder={this.props.item.fields[1]} placeholderTextColor='white' spellCheck={false}>
-            </TextInput>
-            <Switch style={{marginTop: 10}}></Switch>
-          </View>
+					<View flex backgroundColor='#1C2A37'>
+									<FormInput containerStyle={{marginTop: 32}}>{this.props.item.fields[0]}</FormInput>
+									<FormInput containerStyle={{marginTop: 25}}>{this.props.item.fields[1]}</FormInput>
+
+					        <View>
+										<Button style={{marginTop: 40}} backgroundColor='transparent' color='#4596EC' title='Setup guide'/>
+										<Switch alignSelf='center' style={{marginTop: 20}} value={this.props.item.switchValue}></Switch>
+					          <Button style={{marginTop: 20}}backgroundColor='#4596EC' borderRadius={5} title='Save'/>
+					        </View>
+					</View>
 			</View>
 		);
 	}
@@ -26,7 +31,7 @@ class BotListItem extends React.PureComponent {
 
 class BotsList extends React.Component {
 
-	_keyExtractor = (item, index) => item.id;
+	_keyExtractor = (item, index) => item.id.toString();
 
 	_renderSeparator = () => {
 		return (
@@ -66,7 +71,7 @@ class BotsList extends React.Component {
       subtitle: 'Quoine API Key & Secret',
       fields: ['API Key', 'API Secret'],
       setupLink: 'https://www.google.com',
-      switchValue: false,
+      switchValue: true,
       buttonTitle: 'Save',
       id: 1
     });
@@ -93,6 +98,7 @@ class BotsList extends React.Component {
 	render() {
 		return (
 				<FlatList
+					backgroundColor='#151F29'
           style={styles.itemContainer}
 					data={this.state.data}
 					keyExtractor={this._keyExtractor}
@@ -116,7 +122,7 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: 'lightblue',
     width: size,
-    height: size,
+    height: size*1.3,
   }
 });
 
