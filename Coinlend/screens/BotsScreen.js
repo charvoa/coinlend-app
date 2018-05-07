@@ -1,9 +1,8 @@
 import React from 'react';
-import { Switch, FlatList, Dimensions, StyleSheet} from 'react-native';
+import { Switch, FlatList, Dimensions, StyleSheet, SafeAreaView } from 'react-native';
 import { List, ListItem, Button } from 'react-native-elements';
 import { View, TextInput, Text } from 'react-native-ui-lib';
 import { FormLabel, FormInput } from 'react-native-elements'
-import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 class BotListItem extends React.PureComponent {
 
@@ -15,7 +14,7 @@ class BotListItem extends React.PureComponent {
             <Text style={{color: 'white'}}>{this.props.item.subtitle}</Text>
 
           </View>
-					<View flex backgroundColor='#1C2A37'>
+					<View flex backgroundColor='#151F29'>
 									<FormInput containerStyle={{marginTop: 32}}>{this.props.item.fields[0]}</FormInput>
 									<FormInput containerStyle={{marginTop: 25}}>{this.props.item.fields[1]}</FormInput>
 
@@ -99,7 +98,7 @@ class BotsList extends React.Component {
 	render() {
 		return (
 				<FlatList
-					backgroundColor='#151F29'
+					backgroundColor='#27292A'
           style={styles.itemContainer}
 					data={this.state.data}
 					keyExtractor={this._keyExtractor}
@@ -117,7 +116,6 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: 'column',
     alignSelf: 'flex-start',
-		marginTop: getStatusBarHeight()
   },
   item: {
     flex: 1,
@@ -133,9 +131,9 @@ class BotsScreen extends React.Component {
 
 	render() {
 		return (
-			<View>
+			<SafeAreaView backgroundColor='#27292A'>
 				<BotsList />
-			</View>
+			</SafeAreaView>
 		);
 	}
 }

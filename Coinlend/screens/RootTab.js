@@ -1,6 +1,6 @@
 import React from 'react';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Entypo';
 
 import SettingsScreen from './SettingsScreen';
 import BotsScreen from './BotsScreen';
@@ -12,46 +12,64 @@ const RootTab = TabNavigator(
   {
     Today: {
       screen: HomeScreen,
+      navigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused, tintColor }) => {
+          let iconName = 'line-graph'
+          return <Icon name={iconName} size={22} color={tintColor} />;
+        },
+      }),
     },
     Loans: {
       screen: LoansScreen,
+      navigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused, tintColor }) => {
+          let iconName = 'circular-graph'
+          return <Icon name={iconName} size={22} color={tintColor} />;
+        },
+      }),
     },
     Interests: {
       screen: InterestsScreen,
+      navigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused, tintColor }) => {
+          let iconName = 'gauge'
+          return <Icon name={iconName} size={22} color={tintColor} />;
+        },
+      }),
     },
     Bots: {
       screen: BotsScreen,
+      navigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused, tintColor }) => {
+          let iconName = 'cloud'
+          return <Icon name={iconName} size={22} color={tintColor} />;
+        },
+      }),
     },
     Settings: {
       screen: SettingsScreen,
+      navigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused, tintColor }) => {
+          let iconName = 'cog'
+          return <Icon name={iconName} size={22} color={tintColor} />;
+        },
+      }),
     },
   },
   {
     initialRouteName: 'Today',
-    navigationOptions: {
-      headerStyle: {
-        backgroundColor: '#f4511e',
+    tabBarOptions: {
+      activeTintColor: '#4596EC',
+      inactiveTintColor: '#929292',
+      labelStyle: {
+        fontSize: 10,
       },
-      headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontWeight: 'bold',
+      style: {
+        backgroundColor: '#27292A',
       },
-    },
+    }
   },
   {
-    navigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused, tintColor }) => {
-        const { routeName } = navigation.state;
-        let iconName;
-        if (routeName === 'Today') {
-          iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-        } else if (routeName === 'Settings') {
-          iconName = `ios-options${focused ? '' : '-outline'}`;
-        }
-        
-        return <Ionicons name={iconName} size={25} color={tintColor} />;
-      },
-    }),
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
     animationEnabled: false,

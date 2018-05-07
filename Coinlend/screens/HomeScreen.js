@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Image, View, Text, FlatList } from 'react-native';
+import { Image, View, Text, FlatList, ActivityIndicator, SafeAreaView } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
+import { uniqueId } from 'lodash-es';
 
 class HomeListItem extends React.PureComponent {
 
@@ -22,17 +23,17 @@ class HomeListItem extends React.PureComponent {
 						source={{uri: this.props.item.icon_url}}
 					/>
 					<Text style={{ color: 'white', textAlign: 'center', lineHeight: this.cellHeight, marginLeft: 10}}>
-						{this.props.item.name}
+						{this.props.item.currency}
 					</Text>
 				</View>
 				<View style={{flex: 1, height: this.cellHeight}}>
 					<Text style={{ color: 'white', textAlign: 'center', lineHeight: this.cellHeight}}>
-						{this.props.item.exchange}
+						{this.props.item.platform}
 					</Text>
 				</View>
 				<View style={{flex: 1, height: this.cellHeight}}>
 					<Text style={{ color: 'white', textAlign: 'right', fontWeight: 'bold', lineHeight: this.cellHeight, marginRight: 10}}>
-						{this.props.item.evolution}
+						{this.props.item.rate}%
 					</Text>
 				</View>
 			</View>
@@ -42,7 +43,7 @@ class HomeListItem extends React.PureComponent {
 
 class HomeFlatList extends React.Component {
 
-	_keyExtractor = (item, index) => item.id;
+	_keyExtractor = (item, index) => _.uniqueId();
 
 	_renderSeparator = () => {
 		return (
@@ -60,35 +61,39 @@ class HomeFlatList extends React.Component {
 		super(props);
 
 		this.state = {
-			data: []
+			data: [],
+			isLoading: true
 		}
 	}
 
-	makeRequest() {
-		console.log('Hello there')
-
-		list = []
-		for (let i = 0; i < 100; i++) {
-			list.push({
-				name: 'JP-YEN',
-				icon_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/600px-Bitcoin.svg.png',
-				exchange: 'Quoine' ,
-				evolution: '19,97%',
-				id: i.toString()
-			});
-		}
-
-		this.setState({
-			data: list
-		})
+fetchRates() {
+	fetch('https://www.coinlend.org/rates?platform=combined')
+    .then((response) => response.json())
+    .then((responseJson) => {
+			this.setState({
+				data: responseJson["Rates"],
+				isLoading: false
+			})
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 	}
 
 	componentDidMount() {
-		this.makeRequest()
+		this.fetchRates()
 	}
 
 	render() {
+		if (this.state.isLoading) {
+			return (
+				<SafeAreaView backgroundColor='#27292A' style={{flex: 1, height: '100%', justifyContent: 'center', alignItems:'center'}}>
+					<ActivityIndicator size="large" color="#000000" />
+				</SafeAreaView>
+			);
+		}
 		return (
+			<SafeAreaView backgroundColor='#27292A'>
 			<List containerStyle={{ borderBottomWidth: 0, borderTopWidth: 0}} >
 				<FlatList
 					style={{backgroundColor: '#171F27'}}
@@ -98,6 +103,7 @@ class HomeFlatList extends React.Component {
 					ItemSeparatorComponent={this._renderSeparator}
 				/>
 			</List>
+		</SafeAreaView>
 		);
 	}
 }
@@ -107,9 +113,7 @@ class HomeScreen extends React.Component {
 
 	render() {
 		return (
-			<View>
 				<HomeFlatList />
-			</View>
 		);
 	}
 }

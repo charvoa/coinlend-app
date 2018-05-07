@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, Text, SectionList } from 'react-native';
+import { Image, View, Text, SectionList, SafeAreaView } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
 
 class LoansListItem extends React.PureComponent {
@@ -123,9 +123,9 @@ class LoansListItem extends React.PureComponent {
 
       render() {
         return (
-          <View>
+          <SafeAreaView backgroundColor='#27292A'>
             <LoansFlatList />
-          </View>
+          </SafeAreaView>
         );
       }
     }

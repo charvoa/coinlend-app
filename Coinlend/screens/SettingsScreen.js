@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Button, View, Text, Switch, FlatList } from 'react-native';
+import { Button, View, Text, Switch, FlatList, SafeAreaView } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { Buffer } from 'buffer';
+import Icon from 'react-native-vector-icons/Entypo';
 
 class SettingsListItem extends React.PureComponent {
 
@@ -14,10 +15,11 @@ class SettingsListItem extends React.PureComponent {
         style={{flex: 1,
           height: this.cellHeight,
           flexDirection: 'row',
-          backgroundColor: '#171F27',
-          justifyContent: 'flex-start',
+          backgroundColor: '#27292A',
+          justifyContent: 'space-between',
           alignItems: 'center'}}>
-          <Text style={{color: 'white', fontSize: 20, marginLeft:16}}>{this.props.item.mainTitle}</Text>
+          <Text style={{color: 'white', fontSize: 20, paddingLeft:16}}>{this.props.item.mainTitle}</Text>
+          <Icon style={{paddingRight: 10}} name="chevron-right" size={24} color="#C8C7CC" />
         </View>
       );
     }
@@ -45,18 +47,18 @@ class SettingsListItem extends React.PureComponent {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'flex-start',
-          backgroundColor:'#151F29'}}>
+          backgroundColor:'#27292A'}}>
           <View style={{ flex: 1,
             marginTop: 30,
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            backgroundColor:'#151F29'}}>
-            <Text style={{color: 'white', fontSize:20}}>demo@coinlend.org</Text>
-            <Text style={{color: 'white', fontSize:20, marginTop: 30}}>Level 6</Text>
-            <View style={{flex: 1, flexDirection:'row', marginTop:30}}>
+            backgroundColor:'#27292A'}}>
+            <Text style={{color: 'white', fontSize:20}}>{this.state.headerData.email}</Text>
+            <Text style={{color: 'white', fontSize:20, marginTop: 30}}>Level {this.state.headerData.level}</Text>
+            <View style={{flex: 1, flexDirection:'row', marginTop:30, marginBottom:30}}>
               <Text style={{color: 'white', fontSize:20, lineHeight:31}}>USD</Text>
-              <Switch style={{marginLeft:20, marginRight:20}}></Switch>
+              <Switch style={{marginLeft:20, marginRight:20}} value={this.state.headerData.isUsdActive}></Switch>
               <Text style={{color: 'white', fontSize:20, lineHeight:31}}>EUR</Text>
             </View>
 
@@ -69,9 +71,26 @@ class SettingsListItem extends React.PureComponent {
       super(props);
 
       this.state = {
-        data: []
+        data: [],
+        headerData: {email: 'Loading ...', level: '...', isUsdActive: true}
       }
     }
+
+    fetchUser() {
+      var headers = new Headers();
+      headers.append('Authorization', 'Basic ' + Buffer.from('demo@coinlend.org:Demo2018').toString('base64'));
+    	fetch('https://coinlend.org/rest?method=user', {headers: headers})
+        .then((response) => response.json())
+        .then((responseJson) => {
+
+    			this.setState({
+            headerData: {email: responseJson['email'], level: responseJson['level'], isUsdActive: !responseJson['isUsdActive'] }
+    			})
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    	}
 
     makeRequest() {
       list = []
@@ -87,6 +106,8 @@ class SettingsListItem extends React.PureComponent {
       this.setState({
         data: list
       })
+
+      this.fetchUser()
     }
 
     componentDidMount() {
@@ -95,9 +116,10 @@ class SettingsListItem extends React.PureComponent {
 
     render() {
       return (
-        <List containerStyle={{ borderBottomWidth: 0, borderTopWidth: 0}} >
+        <SafeAreaView backgroundColor='#27292A'>
+        <List containerStyle={{ borderBottomWidth: 0, borderTopWidth: 0}} height='100%' >
           <FlatList
-            style={{backgroundColor: '#171F27'}}
+            style={{backgroundColor: '#27292A'}}
             data={this.state.data}
             keyExtractor={this._keyExtractor}
             renderItem={this._renderItem}
@@ -105,6 +127,7 @@ class SettingsListItem extends React.PureComponent {
             ItemSeparatorComponent={this._renderSeparator}
           />
         </List>
+      </SafeAreaView>
       );
     }
   }
@@ -114,9 +137,7 @@ class SettingsListItem extends React.PureComponent {
 
     render() {
       return (
-        <View>
           <SettingsFlatList />
-        </View>
       );
     }
   }
