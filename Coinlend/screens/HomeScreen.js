@@ -8,7 +8,24 @@ class HomeListItem extends React.PureComponent {
 	imageSize = 25;
 	cellHeight = 50;
 
+	textColor = '#000000';
+
+	setTextColor() {
+		if (this.props.item.rate > 30) {
+			this.textColor = '#95ceff'
+		} else if (this.props.item.rate > 20) {
+			this.textColor = '#a9ff96'
+		} else if (this.props.item.rate > 10) {
+			this.textColor = '#9eb0c0'
+		} else {
+			this.textColor = '#ffbc75'
+		}
+	}
+
 	render() {
+
+		this.setTextColor()
+
 		return (
 			<View
 			style={{flex: 1,
@@ -32,7 +49,7 @@ class HomeListItem extends React.PureComponent {
 					</Text>
 				</View>
 				<View style={{flex: 1, height: this.cellHeight}}>
-					<Text style={{ color: 'white', textAlign: 'right', fontWeight: 'bold', lineHeight: this.cellHeight, marginRight: 10}}>
+					<Text style={{ color: this.textColor, textAlign: 'right', fontWeight: 'bold', lineHeight: this.cellHeight, marginRight: 10}}>
 						{this.props.item.rate}%
 					</Text>
 				</View>

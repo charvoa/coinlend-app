@@ -3,6 +3,10 @@ import { Image, View, Text, SectionList, SafeAreaView, ActivityIndicator } from 
 import { List, ListItem } from 'react-native-elements';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Buffer } from 'buffer';
+import { FormattedCurrency } from 'react-native-globalize';
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings(['Module SafeAreaManager', 'Module RCTImageLoader']);
 
 class InterestsListItem extends React.PureComponent {
 
@@ -59,26 +63,30 @@ class InterestsListItem extends React.PureComponent {
         <View backgroundColor='#151F29'>
           <Grid style={{height: 214}}>
             <Row style={{flex:1, flexDirection:'column'}} alignItems='center' justifyContent='center'>
-              <Text style={{fontSize: 40, color:'#A1C363'}}>
-                ${this.state.headerData.totalBalanceUSD}
-              </Text>
+              <FormattedCurrency
+                value={parseInt(this.state.headerData.totalBalanceUSD)}
+                currency="USD"
+                style={{fontSize: 28, color:'#A1C363'}} />
               <Text style={{fontSize: 10, color: 'white'}}>
                 Total lending balance
               </Text>
             </Row>
             <Row>
               <Col alignItems='center' justifyContent='center'>
-                <Text style={{fontSize: 25, color:'#A1C363'}}>
-                  ${this.state.headerData.interestTotal}
-                </Text>
+                <FormattedCurrency
+                  value={parseInt(this.state.headerData.interestTotal)}
+                  currency="USD"
+                  style={{fontSize: 28, color:'#A1C363'}}
+                />
                 <Text style={{fontSize: 10, color: 'white'}}>
                   Total Interest (30d)
                 </Text>
               </Col>
               <Col alignItems='center' justifyContent='center'>
-                <Text style={{fontSize: 25, color:'#A1C363'}}>
-                  ${this.state.headerData.interest30dUSD}
-                </Text>
+                <FormattedCurrency
+                  value={parseInt(this.state.headerData.interest30dUSD)}
+                  currency="USD"
+                  style={{fontSize: 28, color:'#A1C363'}} />
                 <Text style={{fontSize: 10, color: 'white'}}>
                   Expected Interest (next 30d)
                 </Text>

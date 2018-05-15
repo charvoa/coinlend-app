@@ -1,6 +1,6 @@
 import React from 'react';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
-import Icon from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import SettingsScreen from './SettingsScreen';
 import BotsScreen from './BotsScreen';
@@ -14,7 +14,7 @@ const RootTab = TabNavigator(
       screen: HomeScreen,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) => {
-          let iconName = 'line-graph'
+          let iconName = 'feed'
           return <Icon name={iconName} size={22} color={tintColor} />;
         },
       }),
@@ -23,7 +23,7 @@ const RootTab = TabNavigator(
       screen: LoansScreen,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) => {
-          let iconName = 'circular-graph'
+          let iconName = 'exchange'
           return <Icon name={iconName} size={22} color={tintColor} />;
         },
       }),
@@ -32,7 +32,7 @@ const RootTab = TabNavigator(
       screen: InterestsScreen,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) => {
-          let iconName = 'gauge'
+          let iconName = 'bar-chart'
           return <Icon name={iconName} size={22} color={tintColor} />;
         },
       }),
@@ -41,7 +41,7 @@ const RootTab = TabNavigator(
       screen: BotsScreen,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) => {
-          let iconName = 'cloud'
+          let iconName = 'android'
           return <Icon name={iconName} size={22} color={tintColor} />;
         },
       }),
@@ -50,7 +50,7 @@ const RootTab = TabNavigator(
       screen: SettingsScreen,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) => {
-          let iconName = 'cog'
+          let iconName = 'gear'
           return <Icon name={iconName} size={22} color={tintColor} />;
         },
       }),

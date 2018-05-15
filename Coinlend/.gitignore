@@ -2,9 +2,6 @@
 #
 .DS_Store
 
-#VS_Code
-.vscode
-
 # Xcode
 #
 build/
@@ -54,3 +51,6 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+
+# Bundle artifact
+*.jsbundle
