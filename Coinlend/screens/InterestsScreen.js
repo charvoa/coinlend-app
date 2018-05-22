@@ -4,9 +4,6 @@ import { List, ListItem } from 'react-native-elements';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Buffer } from 'buffer';
 import { FormattedCurrency } from 'react-native-globalize';
-import { YellowBox } from 'react-native';
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-YellowBox.ignoreWarnings(['Module SafeAreaManager', 'Module RCTImageLoader']);
 
 class InterestsListItem extends React.PureComponent {
 

@@ -1,19 +1,34 @@
 import React, { Component } from 'react';
-import { Image, View, Text, SectionList, SafeAreaView } from 'react-native';
+import { Image, View, Text, SectionList, SafeAreaView, ActivityIndicator } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
+import { Buffer } from 'buffer';
+import { uniqueId } from 'lodash-es';
 
 class LoansListItem extends React.PureComponent {
 
   imageSize = 25;
   cellHeight = 50;
+  backgroundColor = '#000000';
 
+	setTextColor() {
+		if (this.props.item.rate > 30) {
+			this.backgroundColor = '#95ceff'
+		} else if (this.props.item.rate > 20) {
+			this.backgroundColor = '#a9ff96'
+		} else if (this.props.item.rate > 10) {
+			this.backgroundColor = '#9eb0c0'
+		} else {
+			this.backgroundColor = '#ffbc75'
+		}
+	}
   render() {
+    this.setTextColor()
     return (
       <View
         style={{flex: 1,
           height: this.cellHeight,
           flexDirection: 'row',
-          backgroundColor: '#A1C363',
+          backgroundColor: this.backgroundColor,
           justifyContent: 'flex-start',
           alignItems: 'center'}}>
           <View style={{flex: 1, height: this.cellHeight, flexDirection: 'row', alignItems: 'center', marginLeft: 10}}>
@@ -22,7 +37,7 @@ class LoansListItem extends React.PureComponent {
               source={{uri: this.props.item.icon_url}}
             />
             <Text style={{ color: 'white', textAlign: 'center', lineHeight: this.cellHeight, marginLeft: 10}}>
-              {this.props.item.name}
+              {this.props.item.currency}
             </Text>
           </View>
           <View style={{flex: 1, height: this.cellHeight}}>
@@ -32,12 +47,12 @@ class LoansListItem extends React.PureComponent {
           </View>
           <View style={{flex: 1, height: this.cellHeight}}>
             <Text style={{ color: 'white', textAlign: 'right', fontWeight: 'bold', lineHeight: this.cellHeight, marginRight: 10}}>
-              {this.props.item.time}
+              {this.props.item.duration} days
             </Text>
           </View>
           <View style={{flex: 1, height: this.cellHeight}}>
             <Text style={{ color: 'white', textAlign: 'right', fontWeight: 'bold', lineHeight: this.cellHeight, marginRight: 10}}>
-              {this.props.item.evolution}
+              {this.props.item.rate}
             </Text>
           </View>
         </View>
@@ -47,7 +62,7 @@ class LoansListItem extends React.PureComponent {
 
   class LoansFlatList extends React.Component {
 
-    _keyExtractor = (item, index) => item.id;
+    _keyExtractor = (item, index) => _.uniqueId();
 
     _renderSeparator = () => {
       return (
@@ -70,29 +85,35 @@ class LoansListItem extends React.PureComponent {
     }
 
     constructor(props) {
-      super(props);
+  		super(props);
 
-      this.state = {
-        data: []
-      }
+  		this.state = {
+  			data: [],
+  			isLoading: true
+  		}
+  	}
+
+    fetchLoans() {
+      var headers = new Headers();
+      headers.append('Authorization', 'Basic ' + Buffer.from('demo@coinlend.org:Demo2018').toString('base64'));
+      fetch('https://coinlend.org/rest?method=loans2', {headers: headers})
+      .then((response) => response.json())
+      .then((responseJson) => {
+        dataJson = Object.keys(responseJson).map((key) => {
+          return { data: responseJson[key], title: key }
+        });
+        this.setState({
+          data: dataJson,
+          isLoading: false
+        })
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     }
 
     makeRequest() {
-      list = []
-      for (let i = 0; i < 10; i++) {
-        list.push({
-          name: 'BTC',
-          icon_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/600px-Bitcoin.svg.png',
-          amount: '0.02' ,
-          time: '2 Days',
-          evolution: '19,97%',
-          id: i.toString()
-        });
-      }
-
-      this.setState({
-        data: list
-      })
+      this.fetchLoans()
     }
 
     componentDidMount() {
@@ -100,20 +121,26 @@ class LoansListItem extends React.PureComponent {
     }
 
     render() {
+      if (this.state.isLoading) {
+        return (
+          <SafeAreaView backgroundColor='#27292A' style={{flex: 1, height: '100%', justifyContent: 'center', alignItems:'center'}}>
+            <ActivityIndicator size="large" color="#000000" />
+          </SafeAreaView>
+        );
+      }
       return (
+        <SafeAreaView backgroundColor='#27292A'>
         <List containerStyle={{ borderBottomWidth: 0, borderTopWidth: 0}} >
           <SectionList
             style={{backgroundColor: '#27292A'}}
-            sections={[
-              { title: 'Bitfinex', data: this.state.data },
-              { title: 'Poloniex', data: this.state.data },
-              { title: 'Quoine', data: this.state.data }]}
+            sections={this.state.data}
               keyExtractor={this._keyExtractor}
               renderItem={this._renderItem}
               renderSectionHeader={this._renderSectionHeader}
               ItemSeparatorComponent={this._renderSeparator}
             />
           </List>
+        </SafeAreaView>
         );
       }
     }
@@ -123,9 +150,7 @@ class LoansListItem extends React.PureComponent {
 
       render() {
         return (
-          <SafeAreaView backgroundColor='#27292A'>
             <LoansFlatList />
-          </SafeAreaView>
         );
       }
     }

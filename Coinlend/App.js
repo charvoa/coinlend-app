@@ -3,13 +3,18 @@ import { Button, View, Text } from 'react-native';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
 import { FormattedProvider } from 'react-native-globalize';
 
-import RootTab from './screens/RootTab';
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings(['Module SafeAreaManager', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings(['Class RCTCxxModule']);
+
+import LoginScreen from './screens/LoginScreen';
 
 export default class App extends React.Component {
   render() {
     return (
-      <FormattedProvider locale="en">
-      <RootTab />
+    <FormattedProvider locale="en">
+      <LoginScreen />
     </FormattedProvider>
     );
   }

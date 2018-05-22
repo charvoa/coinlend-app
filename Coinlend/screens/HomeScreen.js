@@ -40,7 +40,7 @@ class HomeListItem extends React.PureComponent {
 						source={{uri: this.props.item.icon_url}}
 					/>
 					<Text style={{ color: 'white', textAlign: 'center', lineHeight: this.cellHeight, marginLeft: 10}}>
-						{this.props.item.currency}
+						{this.props.item.fullCurrency}
 					</Text>
 				</View>
 				<View style={{flex: 1, height: this.cellHeight}}>
