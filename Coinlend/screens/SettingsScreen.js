@@ -1,16 +1,44 @@
 import React, { Component } from 'react';
-import { Button, View, Text, Switch, FlatList, SafeAreaView } from 'react-native';
+import { Button, View, Text, Switch, FlatList, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
 import { Buffer } from 'buffer';
 import Icon from 'react-native-vector-icons/Entypo';
+
+import APIClient from '../network/APIClient';
 
 class SettingsListItem extends React.PureComponent {
 
   imageSize = 25;
   cellHeight = 50;
 
+
+  async _willLogout(navigate) {
+    await APIClient.shared().deleteLoginDetails()
+    navigate('Login')
+  }
+
+  _onPress(id, navigate) {
+    if (id == 3) {
+      Alert.alert(
+        'Sign out',
+        'Are you sure ?',
+        [
+          { text: 'Yes', onPress: () => this._willLogout(navigate) },
+          { text: 'No', onPress: () => console.log('OK Pressed'), style: 'cancel' }
+        ],
+        { cancelable: false }
+      )
+    }
+  }
+
+  constructor(props) {
+    super(props)
+  }
+
   render() {
+    const { navigate } = this.props.navigation
     return (
+      <TouchableOpacity onPress={() => this._onPress(this.props.item.id, navigate)}>
       <View
         style={{flex: 1,
           height: this.cellHeight,
@@ -21,6 +49,7 @@ class SettingsListItem extends React.PureComponent {
           <Text style={{color: 'white', fontSize: 20, paddingLeft:16}}>{this.props.item.mainTitle}</Text>
           <Icon style={{paddingRight: 10}} name="chevron-right" size={24} color="#C8C7CC" />
         </View>
+        </TouchableOpacity>
       );
     }
   }
@@ -38,7 +67,7 @@ class SettingsListItem extends React.PureComponent {
     }
 
     _renderItem = ({ item }) => (
-      <SettingsListItem item={item} containerStyle={{ borderBottomWidth: 0 }}/>
+      <SettingsListItem navigation={this.props.navigation} item={item} containerStyle={{ borderBottomWidth: 0 }}/>
     );
 
     _renderHeader = () => {
@@ -61,7 +90,6 @@ class SettingsListItem extends React.PureComponent {
               <Switch style={{marginLeft:20, marginRight:20}} value={this.state.headerData.isUsdActive}></Switch>
               <Text style={{color: 'white', fontSize:20, lineHeight:31}}>EUR</Text>
             </View>
-
           </View>
         </View>
       );
@@ -76,31 +104,25 @@ class SettingsListItem extends React.PureComponent {
       }
     }
 
-    fetchUser() {
-      var headers = new Headers();
-      headers.append('Authorization', 'Basic ' + Buffer.from('demo@coinlend.org:Demo2018').toString('base64'));
-    	fetch('https://coinlend.org/rest?method=user', {headers: headers})
-        .then((response) => response.json())
-        .then((responseJson) => {
-
-    			this.setState({
-            headerData: {email: responseJson['email'], level: responseJson['level'], isUsdActive: !responseJson['isUsdActive'] }
-    			})
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    	}
+    async fetchUser() {
+      const responseJson = await APIClient.shared().fetchUser()
+      this.setState({
+        headerData: {email: responseJson['email'], level: responseJson['level'], isUsdActive: !responseJson['isUsdActive'] }
+      })
+    }
 
     makeRequest() {
       list = []
       list.push({
         mainTitle: 'Notifications',
         id: '1'
-      });
-      list.push({
+      }, {
         mainTitle: 'Features',
         id: '2'
+      },
+      {
+        mainTitle: 'Sign out',
+        id: '3'
       });
 
       this.setState({
@@ -135,9 +157,16 @@ class SettingsListItem extends React.PureComponent {
 
   class SettingsScreen extends React.Component {
 
+    constructor(props) {
+      super(props)
+    }
+
+    componentDidMount() {
+    }
+
     render() {
       return (
-          <SettingsFlatList />
+          <SettingsFlatList navigation={this.props.navigation}/>
       );
     }
   }

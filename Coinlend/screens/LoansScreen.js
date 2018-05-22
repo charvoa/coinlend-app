@@ -3,6 +3,7 @@ import { Image, View, Text, SectionList, SafeAreaView, ActivityIndicator } from 
 import { List, ListItem } from 'react-native-elements';
 import { Buffer } from 'buffer';
 import { uniqueId } from 'lodash-es';
+import APIClient from '../network/APIClient';
 
 class LoansListItem extends React.PureComponent {
 
@@ -93,23 +94,15 @@ class LoansListItem extends React.PureComponent {
   		}
   	}
 
-    fetchLoans() {
-      var headers = new Headers();
-      headers.append('Authorization', 'Basic ' + Buffer.from('demo@coinlend.org:Demo2018').toString('base64'));
-      fetch('https://coinlend.org/rest?method=loans2', {headers: headers})
-      .then((response) => response.json())
-      .then((responseJson) => {
-        dataJson = Object.keys(responseJson).map((key) => {
-          return { data: responseJson[key], title: key }
-        });
-        this.setState({
-          data: dataJson,
-          isLoading: false
-        })
-      })
-      .catch((error) => {
-        console.error(error);
+    async fetchLoans() {
+      const responseJson = await APIClient.shared().fetchLoans()
+      dataJson = Object.keys(responseJson).map((key) => {
+        return { data: responseJson[key], title: key }
       });
+      this.setState({
+        data: dataJson,
+        isLoading: false
+      })
     }
 
     makeRequest() {
