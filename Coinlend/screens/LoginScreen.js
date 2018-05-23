@@ -25,7 +25,7 @@ class LoginScreen extends React.Component {
 		componentWillMount() {
 			this.loginUser(null, null, true)
 		}
-		
+
 		async _showMoreApp() {
 			this.loginUser(this.state.username, this.state.password, false)
 		}
@@ -67,7 +67,6 @@ class LoginScreen extends React.Component {
 									placeholderTextColor='white'
 									onChangeText={(username) => this.setState({username})}
 									autoCapitalize='none'
-									value='demo@coinlend.'
 								/>
 								<FormInput
 									containerStyle={{marginTop: 40}}

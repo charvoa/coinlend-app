@@ -79,7 +79,7 @@ class LoansListItem extends React.PureComponent {
 
     _renderSectionHeader = ({ section }) => {
       return (
-        <View backgroundColor='#27292A' flex alignItems='center' justifyContent='center' height={40}>
+        <View backgroundColor='#27292A' style={{flex: 1}} alignItems='center' justifyContent='center' height={40}>
           <Text alignSelf='center'style={{fontWeight: "700", fontSize:20, color:'white'}}>{section.title}</Text>
         </View>
       );
