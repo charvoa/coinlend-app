@@ -77,6 +77,12 @@ class APIClient {
 		return responseJson
 	}
 
+	async fetchBots() {
+		const response = await fetch('https://coinlend.org/rest?method=bots', {headers: this.headers})
+		const responseJson = await response.json()
+		return responseJson
+	}
+
 	async fetchLoans() {
 		const response = await fetch('https://coinlend.org/rest?method=loans2', {headers: this.headers})
 		const responseJson = await response.json()

@@ -149,27 +149,26 @@ class InterestsListItem extends React.PureComponent {
                   totalBalanceUSD: responseJson['totalBalanceUSD'],
                   interestTotal: responseJson['interestTotal'],
                   interest30dUSD: responseJson['interest30dUSD']
-                },
-                isLoading: false
+                }
+              })
+            }
+
+            // DEBUG PURPOSE ONLY
+            async fetchLoans() {
+              const responseJson = await APIClient.shared().fetchLoans()
+              dataJson = Object.keys(responseJson).map((key) => {
+                return { data: responseJson[key], title: key }
+              });
+              this.setState({
+                data: dataJson,
               })
             }
 
             async makeRequest() {
               await this.fetchUser()
-
-              list = []
-              for (let i = 0; i < 10; i++) {
-                list.push({
-                  name: 'BTC',
-                  icon_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/600px-Bitcoin.svg.png',
-                  balance: '75.02384' ,
-                  interest: '0.37382',
-                  id: i.toString()
-                });
-              }
-
+              await this.fetchLoans()
               this.setState({
-                data: list
+                isLoading: false
               })
 
             }
@@ -191,10 +190,7 @@ class InterestsListItem extends React.PureComponent {
                   <List containerStyle={{ borderBottomWidth: 0, borderTopWidth: 0}} >
                     <SectionList
                       style={{backgroundColor: '#171F27'}}
-                      sections={[
-                        { title: 'Bitfinex', data: this.state.data },
-                        { title: 'Poloniex', data: this.state.data },
-                        { title: 'Quoine', data: this.state.data }]}
+                      sections={this.state.data}
                         keyExtractor={this._keyExtractor}
                         renderItem={this._renderItem}
                         renderSectionHeader={this._renderSectionHeader}

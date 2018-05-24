@@ -1,39 +1,60 @@
 import React from 'react';
-import { Switch, FlatList, Dimensions, StyleSheet, SafeAreaView } from 'react-native';
+import { Switch, FlatList, Dimensions, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
 import { List, ListItem, Button } from 'react-native-elements';
 import { View, TextInput, Text } from 'react-native-ui-lib';
 import { FormLabel, FormInput } from 'react-native-elements'
+import { uniqueId } from 'lodash-es';
 
 import APIClient from '../network/APIClient';
 
 class BotListItem extends React.PureComponent {
 
 	render() {
-		return (
-			<View backgroundColor='#1C2A37' style={styles.item}>
-          <View style={{height: 80, backgroundColor: '#4F9DED', justifyContent: 'center', alignItems: 'center'}} >
-            <Text style={{color: 'white'}}>{this.props.item.mainTitle}</Text>
-            <Text style={{color: 'white'}}>{this.props.item.subtitle}</Text>
+		if (this.props.item.isActivated == false) {
+			return (
+				<View backgroundColor='#1C2A37' style={styles.item}>
+					<View style={{height: 80, backgroundColor: '#4F9DED', justifyContent: 'center', alignItems: 'center'}} >
+						<Text style={{color: 'white'}}>{this.props.item.botName}</Text>
+						<Text style={{color: 'white'}}>{this.props.item.botName} API Key and Secret</Text>
 
-          </View>
-					<View flex backgroundColor='#151F29'>
-									<FormInput containerStyle={{marginTop: 32}}>{this.props.item.fields[0]}</FormInput>
-									<FormInput containerStyle={{marginTop: 25}}>{this.props.item.fields[1]}</FormInput>
-
-					        <View>
-										<Button style={{marginTop: 40}} backgroundColor='transparent' color='#4596EC' title='Setup guide'/>
-										<Switch alignSelf='center' style={{marginTop: 20}} value={this.props.item.switchValue}></Switch>
-					          <Button style={{marginTop: 20}}backgroundColor='#4596EC' borderRadius={5} title='Save'/>
-					        </View>
 					</View>
-			</View>
-		);
+					<View style={{flex: 1}} backgroundColor='#151F29'>
+						<FormInput containerStyle={{marginTop: 32}}>API Key</FormInput>
+						<FormInput containerStyle={{marginTop: 25}}>API Password</FormInput>
+
+						<View>
+							<Button style={{marginTop: 40}} backgroundColor='transparent' color='#4596EC' title='Setup guide'/>
+							<Switch alignSelf='center' style={{marginTop: 20}} value={this.props.item.isActivated}></Switch>
+							<Button style={{marginTop: 20}}backgroundColor='#4596EC' borderRadius={5} title='Save'/>
+						</View>
+					</View>
+				</View>
+			);
+		} else {
+			return (
+				<View backgroundColor='#1C2A37' style={styles.item}>
+					<View style={{height: 80, backgroundColor: '#4F9DED', justifyContent: 'center', alignItems: 'center'}} >
+						<Text style={{color: 'white'}}>{this.props.item.botName}</Text>
+						<Text style={{color: 'white'}}>{this.props.item.botName} API Key and Secret</Text>
+
+					</View>
+					<View style={{flex: 1}} backgroundColor='#151F29'>
+						<FormLabel style={{alignSelf:'center', justifyContent: 'center'}} containerStyle={{marginTop: 32}}>Bitfinex credentials valid</FormLabel>
+						<View>
+							<Button style={{marginTop: 40}} backgroundColor='transparent' color='#4596EC' title='Setup guide'/>
+							<Switch alignSelf='center' style={{marginTop: 20}} value={this.props.item.isActivated}></Switch>
+							<Button style={{marginTop: 20}}backgroundColor='#4596EC' borderRadius={5} title='Save'/>
+						</View>
+					</View>
+				</View>
+			)
+		}
 	}
 }
 
 class BotsList extends React.Component {
 
-	_keyExtractor = (item, index) => item.id.toString();
+	_keyExtractor = (item, index) => _.uniqueId();
 
 	_renderSeparator = () => {
 		return (
@@ -51,54 +72,33 @@ class BotsList extends React.Component {
 		super(props);
 
 		this.state = {
-			data: []
+			data: [],
+			isLoading: true
 		}
 	}
 
-	makeRequest() {
-		list = []
-
-    list.push({
-      mainTitle: 'Poloniex',
-      subtitle: 'Poloniex API Key & Secret',
-      fields: ['API Key', 'API Secret'],
-      setupLink: 'https://www.google.com',
-      switchValue: false,
-      buttonTitle: 'Save',
-      id: 0
-    });
-
-    list.push({
-      mainTitle: 'Quoine',
-      subtitle: 'Quoine API Key & Secret',
-      fields: ['API Key', 'API Secret'],
-      setupLink: 'https://www.google.com',
-      switchValue: true,
-      buttonTitle: 'Save',
-      id: 1
-    });
-
-    list.push({
-      mainTitle: 'Bitfinex',
-      subtitle: 'Bitfinex API Key & Secret',
-      fields: ['API Key', 'API Secret'],
-      setupLink: 'https://www.google.com',
-      switchValue: false,
-      buttonTitle: 'Save',
-      id: 2
-    });
-
+	async fetchBots() {
+		const data = await APIClient.shared().fetchBots()
 		this.setState({
-			data: list
+			data: data,
+			isLoading: false
 		})
 	}
 
 	componentDidMount() {
-		this.makeRequest()
+		this.fetchBots()
 	}
 
 	render() {
+		if (this.state.isLoading) {
+			return (
+				<SafeAreaView backgroundColor='#27292A' style={{flex: 1, height: '100%', justifyContent: 'center', alignItems:'center'}}>
+					<ActivityIndicator size="large" color="#000000" />
+				</SafeAreaView>
+			);
+		}
 		return (
+			<SafeAreaView backgroundColor='#27292A' style={{flex: 1, height: '100%', justifyContent: 'center', alignItems:'center'}}>
 				<FlatList
 					backgroundColor='#27292A'
           style={styles.itemContainer}
@@ -107,6 +107,7 @@ class BotsList extends React.Component {
 					renderItem={this._renderItem}
           numColumns={1}
 				/>
+			</SafeAreaView>
 		);
 	}
 }
@@ -133,9 +134,7 @@ class BotsScreen extends React.Component {
 
 	render() {
 		return (
-			<SafeAreaView backgroundColor='#27292A'>
 				<BotsList />
-			</SafeAreaView>
 		);
 	}
 }
