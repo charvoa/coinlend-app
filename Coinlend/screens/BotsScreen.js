@@ -9,8 +9,30 @@ import APIClient from '../network/APIClient';
 
 class BotListItem extends React.PureComponent {
 
+	async _onPress(props) {
+		const status = await APIClient.shared().changeBotState(props.item.botName, !props.item.isActivated)
+		if (status == 1) {
+			props.resetFunction()
+		}
+	}
+
+	_renderFields(isActivated) {
+		if (isActivated) {
+			return (
+				<FormLabel containerStyle={{marginTop: 32}}>Bitfinex credentials valid</FormLabel>
+			)
+		} else {
+			return (
+				<View>
+					<FormInput containerStyle={{marginTop: 32}}>API Key</FormInput>
+			 		<FormInput containerStyle={{marginTop: 25}}>API Password</FormInput>
+				</View>
+			)
+		}
+	}
+
 	render() {
-		if (this.props.item.isActivated == false) {
+		const isActivated = this.props.item.isActivated
 			return (
 				<View backgroundColor='#1C2A37' style={styles.item}>
 					<View style={{height: 80, backgroundColor: '#4F9DED', justifyContent: 'center', alignItems: 'center'}} >
@@ -19,36 +41,15 @@ class BotListItem extends React.PureComponent {
 
 					</View>
 					<View style={{flex: 1}} backgroundColor='#151F29'>
-						<FormInput containerStyle={{marginTop: 32}}>API Key</FormInput>
-						<FormInput containerStyle={{marginTop: 25}}>API Password</FormInput>
-
-						<View>
+						{this._renderFields(isActivated)}
+					<View>
 							<Button style={{marginTop: 40}} backgroundColor='transparent' color='#4596EC' title='Setup guide'/>
-							<Switch alignSelf='center' style={{marginTop: 20}} value={this.props.item.isActivated}></Switch>
-							<Button style={{marginTop: 20}}backgroundColor='#4596EC' borderRadius={5} title='Save'/>
+							<Switch onValueChange={() => this._onPress(this.props)} alignSelf='center' style={{marginTop: 20}} value={this.props.item.isActivated}></Switch>
+							<Button style={{marginTop: 20}} backgroundColor='#4596EC' borderRadius={5} title='Save'/>
 						</View>
 					</View>
 				</View>
 			);
-		} else {
-			return (
-				<View backgroundColor='#1C2A37' style={styles.item}>
-					<View style={{height: 80, backgroundColor: '#4F9DED', justifyContent: 'center', alignItems: 'center'}} >
-						<Text style={{color: 'white'}}>{this.props.item.botName}</Text>
-						<Text style={{color: 'white'}}>{this.props.item.botName} API Key and Secret</Text>
-
-					</View>
-					<View style={{flex: 1}} backgroundColor='#151F29'>
-						<FormLabel style={{alignSelf:'center', justifyContent: 'center'}} containerStyle={{marginTop: 32}}>Bitfinex credentials valid</FormLabel>
-						<View>
-							<Button style={{marginTop: 40}} backgroundColor='transparent' color='#4596EC' title='Setup guide'/>
-							<Switch alignSelf='center' style={{marginTop: 20}} value={this.props.item.isActivated}></Switch>
-							<Button style={{marginTop: 20}}backgroundColor='#4596EC' borderRadius={5} title='Save'/>
-						</View>
-					</View>
-				</View>
-			)
-		}
 	}
 }
 
@@ -65,7 +66,7 @@ class BotsList extends React.Component {
 	}
 
 	_renderItem = ({ item }) => (
-		<BotListItem item={item} containerStyle={{ borderBottomWidth: 0 }}/>
+		<BotListItem item={item} resetFunction={this.forceUpdate} containerStyle={{ borderBottomWidth: 0 }}/>
 	);
 
 	constructor(props) {

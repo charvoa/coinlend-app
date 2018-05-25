@@ -16,6 +16,11 @@ class APIClient {
 		return APIClient.apiClientInstance;
 	}
 
+	reset() {
+		headers = null
+		apiClientInstance = null
+	}
+
 	async login(username, password, withSave) {
 		this.headers = new Headers()
 		this.headers.append('Authorization', 'Basic ' + Buffer.from(username + ':' + password).toString('base64'))
@@ -88,6 +93,18 @@ class APIClient {
 		const responseJson = await response.json()
 		return responseJson
 	}
+
+
+	async changeBotState(platform, newState) {
+		const body = 'platform='+platform+'&activate='+newState
+		const response = await fetch('https://coinlend.org/rest', { method: 'POST', headers: this.headers, body: body})
+		if (response.status == '200') {
+			return 1
+		} else {
+			return 0
+		}
+	}
+
 }
 
 module.exports = APIClient;

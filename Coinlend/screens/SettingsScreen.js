@@ -14,6 +14,7 @@ class SettingsListItem extends React.PureComponent {
 
   async _willLogout(navigate) {
     await APIClient.shared().deleteLoginDetails()
+    APIClient.shared().reset()
     navigate('Login')
   }
 
@@ -37,20 +38,24 @@ class SettingsListItem extends React.PureComponent {
 
   render() {
     const { navigate } = this.props.navigation
-    return (
-      <TouchableOpacity onPress={() => this._onPress(this.props.item.id, navigate)}>
-      <View
-        style={{flex: 1,
-          height: this.cellHeight,
-          flexDirection: 'row',
-          backgroundColor: '#27292A',
-          justifyContent: 'space-between',
-          alignItems: 'center'}}>
-          <Text style={{color: 'white', fontSize: 20, paddingLeft:16}}>{this.props.item.mainTitle}</Text>
-          <Icon style={{paddingRight: 10}} name="chevron-right" size={24} color="#C8C7CC" />
-        </View>
-        </TouchableOpacity>
-      );
+    if (this.props.item.isActive) {
+      return (
+        <TouchableOpacity onPress={() => this._onPress(this.props.item.id, navigate)}>
+          <View
+            style={{flex: 1,
+              height: this.cellHeight,
+              flexDirection: 'row',
+              backgroundColor: '#27292A',
+              justifyContent: 'space-between',
+              alignItems: 'center'}}>
+              <Text style={{color: 'white', fontSize: 20, paddingLeft:16}}>{this.props.item.mainTitle}</Text>
+              <Icon style={{paddingRight: 10}} name="chevron-right" size={24} color="#C8C7CC" />
+            </View>
+          </TouchableOpacity>
+        );
+      } else {
+        return null;
+      }
     }
   }
 
@@ -115,14 +120,17 @@ class SettingsListItem extends React.PureComponent {
       list = []
       list.push({
         mainTitle: 'Notifications',
-        id: '1'
+        id: '1',
+        isActive: false
       }, {
         mainTitle: 'Features',
-        id: '2'
+        id: '2',
+        isActive: false
       },
       {
         mainTitle: 'Sign out',
-        id: '3'
+        id: '3',
+        isActive: true
       });
 
       this.setState({
