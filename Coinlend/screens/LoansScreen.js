@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Image, View, Text, SectionList, SafeAreaView, ActivityIndicator } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
 import { Buffer } from 'buffer';
 import { uniqueId } from 'lodash-es';
 import APIClient from '../network/APIClient';
@@ -123,7 +122,6 @@ class LoansListItem extends React.PureComponent {
       }
       return (
         <SafeAreaView backgroundColor='#27292A'>
-        <List containerStyle={{ borderBottomWidth: 0, borderTopWidth: 0}} >
           <SectionList
             style={{backgroundColor: '#27292A'}}
             sections={this.state.data}
@@ -132,7 +130,6 @@ class LoansListItem extends React.PureComponent {
               renderSectionHeader={this._renderSectionHeader}
               ItemSeparatorComponent={this._renderSeparator}
             />
-          </List>
         </SafeAreaView>
         );
       }

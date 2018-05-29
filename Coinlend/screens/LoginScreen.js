@@ -1,10 +1,12 @@
 import React from 'react';
-import { Switch, FlatList, Dimensions, StyleSheet, SafeAreaView, Alert, ActivityIndicator } from 'react-native';
-import { List, ListItem, Button } from 'react-native-elements';
+import { Switch, FlatList, Dimensions, StyleSheet, SafeAreaView, Alert, ActivityIndicator, Image } from 'react-native';
+import { Button } from 'react-native-elements';
 import { View, TextInput, Text } from 'react-native-ui-lib';
 import { FormLabel, FormInput } from 'react-native-elements';
 
 import APIClient from '../network/APIClient';
+
+const fullWidth = Dimensions.get('window').width;
 
 class LoginScreen extends React.Component {
 
@@ -59,30 +61,35 @@ class LoginScreen extends React.Component {
 				)
 			}
 			return (
-				<View style={{flex: 1, flexDirection: 'column'}} backgroundColor='black'>
-								<FormInput
-									containerStyle={{marginTop: 278}}
-									style={{height: 45, color: 'white'}}
-									placeholder='mail@something.com'
-									placeholderTextColor='white'
-									onChangeText={(username) => this.setState({username})}
-									autoCapitalize='none'
-								/>
-								<FormInput
-									containerStyle={{marginTop: 40}}
-									style={{height: 45, color: 'white'}}
-									secureTextEntry={true}
-									placeholder='*******'
-									placeholderTextColor='white'
-									onChangeText={(password) => this.setState({password})}
-									autoCapitalize='none'
-								/>
-								<Button onPress={() => this._showMoreApp()}
-									style={{marginTop: 30, height: 45}}
-									backgroundColor='#4596EC'
-									borderRadius={5}
-									title='LOGIN'
-								/>
+				<View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems:'center'}} backgroundColor='black'>
+					<Image
+						style={{width: 295, height: 70}}
+						source={require('../assets/img/mainLogo.png')}
+					/>
+					<FormInput
+						containerStyle={{marginTop: 139, width: fullWidth*0.8}}
+						style={{height: 45, color: 'white'}}
+						placeholder='mail@something.com'
+						placeholderTextColor='white'
+						onChangeText={(username) => this.setState({username})}
+						autoCapitalize='none'
+					/>
+					<FormInput
+						containerStyle={{marginTop: 40, width: fullWidth*0.8}}
+						style={{height: 45, color: 'white'}}
+						secureTextEntry={true}
+						placeholder='*******'
+						placeholderTextColor='white'
+						onChangeText={(password) => this.setState({password})}
+						autoCapitalize='none'
+					/>
+					<Button onPress={() => this._showMoreApp()}
+						style={{marginTop: 30, height: 45, width: fullWidth*0.8}}
+						backgroundColor='#4596EC'
+						borderRadius={5}
+						disabled={(this.state.username.trim() == '' || this.state.password.trim() == '')}
+						title='LOGIN'
+					/>
 				</View>
 			);
 		}

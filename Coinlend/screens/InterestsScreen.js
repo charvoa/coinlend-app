@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { Image, View, Text, SectionList, SafeAreaView, ActivityIndicator } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Buffer } from 'buffer';
 import APIClient from '../network/APIClient';
 import { FormattedProvider } from 'react-native-globalize';
 import { FormattedCurrency } from 'react-native-globalize';
-
+import Icon from 'react-native-vector-icons/Entypo';
 class InterestsListItem extends React.PureComponent {
 
   imageSize = 25;
@@ -187,7 +186,6 @@ class InterestsListItem extends React.PureComponent {
               }
               return (
                 <SafeAreaView backgroundColor='#27292A'>
-                  <List containerStyle={{ borderBottomWidth: 0, borderTopWidth: 0}} >
                     <SectionList
                       style={{backgroundColor: '#171F27'}}
                       sections={this.state.data}
@@ -197,7 +195,6 @@ class InterestsListItem extends React.PureComponent {
                         ListHeaderComponent={this._renderHeader}
                         ItemSeparatorComponent={this._renderSeparator}
                       />
-                    </List>
                   </SafeAreaView>
                 );
               }

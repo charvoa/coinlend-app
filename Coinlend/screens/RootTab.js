@@ -1,6 +1,6 @@
 import React from 'react';
+import { Image } from 'react-native';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import SettingsScreen from './SettingsScreen';
 import BotsScreen from './BotsScreen';
@@ -14,8 +14,7 @@ const RootTab = TabNavigator(
       screen: HomeScreen,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) => {
-          let iconName = 'feed'
-          return <Icon name={iconName} size={22} color={tintColor} />;
+          return <Image source={require('../assets/icn/chart.png')} size={22} style={{tintColor: tintColor}} tintColor={tintColor} />;
         },
       }),
     },
@@ -23,8 +22,7 @@ const RootTab = TabNavigator(
       screen: LoansScreen,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) => {
-          let iconName = 'exchange'
-          return <Icon name={iconName} size={22} color={tintColor} />;
+          return <Image source={require('../assets/icn/handshake.png')} size={22} style={{tintColor: tintColor}} tintColor={tintColor} />;
         },
       }),
     },
@@ -32,8 +30,7 @@ const RootTab = TabNavigator(
       screen: InterestsScreen,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) => {
-          let iconName = 'bar-chart'
-          return <Icon name={iconName} size={22} color={tintColor} />;
+          return <Image source={require('../assets/icn/Investment.png')} size={22} style={{tintColor: tintColor}} tintColor={tintColor} />;
         },
       }),
     },
@@ -41,8 +38,7 @@ const RootTab = TabNavigator(
       screen: BotsScreen,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) => {
-          let iconName = 'android'
-          return <Icon name={iconName} size={22} color={tintColor} />;
+          return <Image source={require('../assets/icn/security_checked.png')} size={22} style={{tintColor: tintColor}} tintColor={tintColor} />;
         },
       }),
     },
@@ -50,8 +46,7 @@ const RootTab = TabNavigator(
       screen: SettingsScreen,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) => {
-          let iconName = 'gear'
-          return <Icon name={iconName} size={22} color={tintColor} />;
+          return <Image source={require('../assets/icn/settings.png')} size={22} style={{tintColor: tintColor}} tintColor={tintColor} />;
         },
       }),
     },

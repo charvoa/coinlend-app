@@ -94,7 +94,15 @@ class APIClient {
 		return responseJson
 	}
 
-
+	async updateBotCredentials(platform, apiKey, apiSecret) {
+		const body = 'platform='+platform+'&apiKey='+apiKey+'&apiSecret='+apiSecret
+		const response = await fetch('https://coinlend.org/rest?method=updateCredentials', { method: 'POST', headers: this.headers, body: body})
+		if (response.status == '200') {
+			return 1
+		} else {
+			return 0
+		}
+	}
 	async changeBotState(platform, newState) {
 		const body = 'platform='+platform+'&activate='+newState
 		const response = await fetch('https://coinlend.org/rest', { method: 'POST', headers: this.headers, body: body})

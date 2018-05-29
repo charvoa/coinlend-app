@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Image, View, Text, FlatList, ActivityIndicator, SafeAreaView } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
 import { uniqueId } from 'lodash-es';
 
 class HomeListItem extends React.PureComponent {
@@ -111,7 +110,6 @@ fetchRates() {
 		}
 		return (
 			<SafeAreaView backgroundColor='#27292A'>
-			<List containerStyle={{ borderBottomWidth: 0, borderTopWidth: 0}} >
 				<FlatList
 					style={{backgroundColor: '#171F27'}}
 					data={this.state.data}
@@ -119,7 +117,6 @@ fetchRates() {
 					renderItem={this._renderItem}
 					ItemSeparatorComponent={this._renderSeparator}
 				/>
-			</List>
 		</SafeAreaView>
 		);
 	}
