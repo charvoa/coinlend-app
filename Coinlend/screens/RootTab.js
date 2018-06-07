@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import SettingsScreen from './SettingsScreen';
-import BotsScreen from './BotsScreen';
+import BotsStackNavigator from './BotsStackNavigator';
 import InterestsScreen from './InterestsScreen';
 import LoansScreen from './LoansScreen';
 import HomeScreen from './HomeScreen';
@@ -35,7 +35,7 @@ const RootTab = TabNavigator(
       }),
     },
     Bots: {
-      screen: BotsScreen,
+      screen: BotsStackNavigator,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, tintColor }) => {
           return <Image source={require('../assets/icn/security_checked.png')} size={22} style={{tintColor: tintColor}} tintColor={tintColor} />;

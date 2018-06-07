@@ -3,8 +3,10 @@ import { Switch, FlatList, Dimensions, StyleSheet, SafeAreaView, ActivityIndicat
 import { View, TextInput, Text } from 'react-native-ui-lib';
 import { FormLabel, FormInput, Button } from 'react-native-elements'
 import { uniqueId } from 'lodash-es';
+import { withNavigation } from 'react-navigation';
 
 import APIClient from '../network/APIClient';
+import BotsStackNavigator from './BotsStackNavigator';
 
 class BotListItem extends React.PureComponent {
 
@@ -51,6 +53,10 @@ class BotListItem extends React.PureComponent {
 				isLoading: false
 			})
 		}
+	}
+
+	_onSettingsPress(props) {
+		props.navigation.navigate('BotDetail')
 	}
 
 	_renderFields(isCredentialsValid) {
@@ -120,6 +126,14 @@ class BotListItem extends React.PureComponent {
 								backgroundColor='#4596EC'
 								borderRadius={5}
 								title='Save'/> }
+								{ this.state.isCredentialsValid &&
+									<Button
+									style={{marginTop: 20}}
+									onPress={ () => {this._onSettingsPress(this.props)}}
+									backgroundColor='#4596EC'
+									borderRadius={5}
+									title='Settings'/>
+								}
 						</View>
 					</View>
 				</View>
@@ -127,6 +141,9 @@ class BotListItem extends React.PureComponent {
 		}
 	}
 }
+
+module.exports = BotListItem;
+
 
 class BotsList extends React.Component {
 
@@ -141,7 +158,7 @@ class BotsList extends React.Component {
 	}
 
 	_renderItem = ({ item }) => (
-		<BotListItem item={item} containerStyle={{ borderBottomWidth: 0 }}/>
+		<BotListItem item={item} navigation={this.props.navigation} containerStyle={{ borderBottomWidth: 0 }}/>
 	);
 
 	constructor(props) {
@@ -188,6 +205,9 @@ class BotsList extends React.Component {
 	}
 }
 
+module.exports = BotsList;
+
+
 const numColumns = 1;
 const size = Dimensions.get('window').width - 40;
 
@@ -201,16 +221,26 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: 'lightblue',
     width: size,
-    height: size*1.3,
-  }
+		height: size*1.3,
+	}
 });
 
 
 class BotsScreen extends React.Component {
 
+
+	static navigationOptions = {
+		headerStyle: {
+			backgroundColor: '#27292A',
+		},
+		headerTitleStyle: {
+			fontWeight: 'bold',
+		},
+	}
+
 	render() {
 		return (
-				<BotsList />
+			<BotsList navigation={this.props.navigation}/>
 		);
 	}
 }
